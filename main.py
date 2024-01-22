@@ -95,7 +95,17 @@ def kick_user(ip, port, playerid, playerkey,authcred):
     session = requests.Session()
     session.cookies.set("authcred", authcred)
     session.post(url, data=data)
-
+    
+def revoke_user(ip, port,authcred):
+    print("port:: "+ port + " " + str(datetime.now())+" run revoke_user...")
+    url = "http://" + ip + ":" + port + "/ServerAdmin/policy/session"  
+    data = {
+        "banid": 0,
+        "action": "revoke"
+    }
+    session = requests.Session()
+    session.cookies.set("authcred", authcred)
+    session.post(url, data=data)
 
 
 def sha1(s):
@@ -105,6 +115,7 @@ def sha1(s):
 # u ip xxx.xx.xxx.xxx
 ip = ""
 port = "8080"
+port_2 = "8081"
 user = "Admin"
 password = "password"
 authcred = login(user, password)
@@ -112,5 +123,7 @@ print("go...")
 while True:
     ping = 200
     player_trigger = 30
-    kick_task(authcred, ip, port, ping, player_trigger)
+    # kick_task(authcred, ip, port, ping, player_trigger)
+    revoke_user(ip, port,authcred)
+    revoke_user(ip, port_2,authcred)
     time.sleep(30)
